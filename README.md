@@ -1,7 +1,3 @@
-Berikut versi yang **lebih rapi, profesional, dan dalam bahasa Inggris** tanpa mengubah atau menambahkan isi dari teks Anda. Saya hanya merapikan struktur dan menerjemahkannya.
-
----
-
 # 📊 API Monitoring - DevOps Monitoring Tool
 
 ## 📋 Description
