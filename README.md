@@ -36,7 +36,7 @@ monitoring-api/
 
 ### 1. Setup Project
 ```bash
-mkdir monitoring-api&& cd monitoring-api
+mkdir monitoring-api && cd monitoring-api
 ```
 
 ### 2. Virtual Environment
