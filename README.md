@@ -16,7 +16,7 @@ Python 3.8+, FastAPI, Uvicorn, Requests, Psutil, Jinja2, Python-dotenv
 
 ## 📁 Struktur Project
 ```
-monitoring-api-product/
+monitoring-api/
 ├── requirements.txt
 ├── .env
 ├── run.sh / run.bat
