@@ -58,7 +58,7 @@ pip install -r requirements.txt
 
 ### 4. Konfigurasi (.env)
 ```env
-API_URL=http://localhost:3000
+API_URL=http://localhost:3000 # Ganti URL API Backend anda
 CHECK_INTERVAL=30
 LOG_FILE=./data/monitoring.log
 ALERT_THRESHOLD=3
@@ -105,7 +105,7 @@ Edit `app/config.py`:
 ```python
 ENDPOINTS = [
     {'name': 'Root', 'path': '/', 'method': 'GET'},
-    {'name': 'All Products', 'path': '/api/', 'method': 'GET'},
+    {'name': 'All', 'path': '/api/', 'method': 'GET'},
 ]
 ```
 
@@ -115,7 +115,7 @@ Emdpoint di sesuaikan sama route api anda !
 
 **API tidak terbaca:**
 ```bash
-curl http://localhost:3000  # Cek backend
+curl http://localhost:3000  # Ganti Url API Backend anda
 curl http://localhost:8000/api/logs  # Cek log
 ```
 
