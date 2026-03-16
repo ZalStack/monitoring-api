@@ -16,8 +16,8 @@ class Config:
     # Endpoints untuk dimonitor
     ENDPOINTS = [
         {'name': 'Root', 'path': '/', 'method': 'GET'},
-        {'name': 'Get All Products', 'path': '/api/products', 'method': 'GET'},
-        {'name': 'Get Product by ID', 'path': '/api/products/1', 'method': 'GET'},  # Test with ID 1
+        {'name': 'Get All Products', 'path': '/api/', 'method': 'GET'},
+        {'name': 'Get Product by ID', 'path': '/api/', 'method': 'GET'},  # Test with ID 1
     ]
     
     # Sample data untuk testing POST (optional)
