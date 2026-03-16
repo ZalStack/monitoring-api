@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Product Monitoring Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .status-up {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-down {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-degraded {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .status-waiting {
+            background: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+        }
+        
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        /* Metric Styles */
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            line-height: 1.2;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Endpoint List */
+        .endpoint-list {
+            list-style: none;
+        }
+        
+        .endpoint-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .endpoint-item:last-child {
+            border-bottom: none;
+        }
+        
+        .endpoint-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .endpoint-info small {
+            color: #999;
+        }
+        
+        .endpoint-status {
+            text-align: right;
+        }
+        
+        .response-time {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        /* Alert Box */
+        .alert {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #dc3545;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .alert-icon {
+            font-size: 2em;
+        }
+        
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        /* Buttons */
+        .btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            border-color: #5a67d8;
+        }
+        
+        /* System Metrics */
+        .system-metric {
+            margin-bottom: 15px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 API Product Monitoring Dashboard</h1>
+            <p>Monitoring untuk backend API: <strong>{{ api_url }}</strong></p>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span class="status-badge {% if current and current.health %}status-{{ current.health.status }}{% else %}status-waiting{% endif %}">
+                    {% if current and current.health %}
+                        {{ current.health.status|upper }}
+                    {% else %}
+                        WAITING FOR DATA
+                    {% endif %}
+                </span>
+                <span style="color: white;">
+                    Last check: {% if last_check %}{{ last_check.strftime('%H:%M:%S') }}{% else %}Never{% endif %}
+                </span>
+                <a href="/" class="btn" style="margin-left: auto;">🔄 Refresh</a>
+            </div>
+        </div>
+        
+        <!-- Alert -->
+        {% if current and current.alert %}
+        <div class="alert">
+            <span class="alert-icon">⚠️</span>
+            <div>
+                <strong>Alert!</strong> Terdeteksi {{ current.failed_attempts }} kali gagal berturut-turut!
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Summary Cards -->
+        <div class="grid">
+            <!-- API Health Card -->
+            <div class="card">
+                <h3>🔍 API Health</h3>
+                {% if current and current.health %}
+                    <div class="metric">
+                        <div class="metric-value">{{ current.health.response_time_ms|default('0') }}ms</div>
+                        <div class="metric-label">Response Time</div>
+                    </div>
+                    {% if current.health.error %}
+                        <div style="color: #dc3545; text-align: center; margin-top: 10px;">
+                            Error: {{ current.health.error }}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div style="text-align: center; padding: 30px;">
+                        <div class="loading" style="margin: 0 auto 15px;"></div>
+                        <p>Menunggu data pertama...</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- System Metrics Card -->
+            <div class="card">
+                <h3>💻 System Metrics</h3>
+                {% if current and current.system %}
+                    <div class="system-metric">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>CPU Usage</span>
+                            <span><strong>{{ current.system.cpu.percent }}%</strong></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ current.system.cpu.percent }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-metric">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Memory Usage</span>
+                            <span><strong>{{ current.system.memory.percent }}%</strong> ({{ current.system.memory.used_mb }} MB / {{ current.system.memory.total_mb }} MB)</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ current.system.memory.percent }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-metric">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Disk Usage</span>
+                            <span><strong>{{ current.system.disk.percent }}%</strong> ({{ current.system.disk.used_gb }} GB / {{ current.system.disk.total_gb }} GB)</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ current.system.disk.percent }}%"></div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p style="text-align: center; color: #999;">No system metrics available</p>
+                {% endif %}
+            </div>
+            
+            <!-- Summary Card -->
+            <div class="card">
+                <h3>📈 Summary</h3>
+                <div class="metric">
+                    <div class="metric-value">{{ summary.uptime_percentage }}%</div>
+                    <div class="metric-label">Uptime</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5em; font-weight: bold; color: #28a745;">{{ summary.successful_checks }}</div>
+                        <div style="font-size: 0.9em; color: #666;">Success</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5em; font-weight: bold; color: #dc3545;">{{ summary.failed_checks }}</div>
+                        <div style="font-size: 0.9em; color: #666;">Failed</div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <small>Total Checks: {{ summary.total_checks }}</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Endpoints Status -->
+        <div class="card" style="margin-bottom: 30px;">
+            <h3>🔌 Endpoints Status</h3>
+            {% if current and current.endpoints %}
+                <div class="endpoint-list">
+                    {% for endpoint in current.endpoints %}
+                    <div class="endpoint-item">
+                        <div class="endpoint-info">
+                            <h4>{{ endpoint.name }}</h4>
+                            <small>{{ endpoint.method }} {{ endpoint.path }}</small>
+                        </div>
+                        <div class="endpoint-status">
+                            <span class="status-badge status-{{ endpoint.status }}">
+                                {{ endpoint.status|upper }}
+                            </span>
+                            {% if endpoint.response_time_ms %}
+                                <div class="response-time">{{ endpoint.response_time_ms }}ms</div>
+                            {% endif %}
+                            {% if endpoint.status_code %}
+                                <div><small>HTTP {{ endpoint.status_code }}</small></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="text-align: center; color: #999;">No endpoint data available</p>
+            {% endif %}
+        </div>
+        
+        <!-- History Table -->
+        <div class="table-container">
+            <h3 style="margin-bottom: 20px;">📋 Recent Checks History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Response Time</th>
+                        <th>Endpoints</th>
+                        <th>System</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ item.timestamp.split('T')[1][:8] }}</td>
+                        <td>
+                            <span class="status-badge status-{{ item.health.status }}" style="padding: 4px 8px;">
+                                {{ item.health.status|upper }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if item.health.response_time_ms %}
+                                {{ item.health.response_time_ms }}ms
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for ep in item.endpoints %}
+                                <span class="status-badge status-{{ ep.status }}" style="padding: 2px 6px; font-size: 11px; margin: 2px;">
+                                    {{ ep.method }}
+                                </span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if item.system %}
+                                CPU: {{ item.system.cpu.percent }}%<br>
+                                RAM: {{ item.system.memory.percent }}%
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% if not history %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 30px;">
+                            <div class="loading" style="margin: 0 auto 15px;"></div>
+                            <p>Waiting for monitoring data...</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Monitoring API Product - Simple DevOps Tool</p>
+            <p style="font-size: 0.9em; color: #999;">Check interval: {{ current.check_interval if current else 30 }} seconds</p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto refresh every 30 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
