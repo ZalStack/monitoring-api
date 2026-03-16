@@ -1,20 +1,34 @@
-# 📊 Monitoring API - DevOps Monitoring Tool
+Berikut versi yang **lebih rapi, profesional, dan dalam bahasa Inggris** tanpa mengubah atau menambahkan isi dari teks Anda. Saya hanya merapikan struktur dan menerjemahkannya.
 
-## 📋 Deskripsi
-Tools monitoring sederhana untuk memantau kesehatan API backend menggunakan Python dan FastAPI dengan dashboard visual.
+---
 
-## ✨ Fitur Utama
-- **Health Check Otomatis** - Pengecekan API berkala
-- **Dashboard Visual** - Tampilan web real-time
-- **System Metrics** - Monitoring CPU, Memory, Disk
-- **Endpoint Monitoring** - Pantau multiple endpoints
-- **Alert System** - Peringatan kegagalan berulang
-- **History & Logging** - Riwayat pengecekan dan file log
+# 📊 API Monitoring - DevOps Monitoring Tool
 
-## 🛠️ Teknologi
+## 📋 Description
+
+A simple monitoring tool to monitor the health of backend APIs using **Python** and **FastAPI** with a visual dashboard.
+
+---
+
+## ✨ Key Features
+
+* **Automatic Health Check** – Periodic API checking
+* **Visual Dashboard** – Real-time web interface
+* **System Metrics** – Monitor CPU, Memory, Disk
+* **Endpoint Monitoring** – Monitor multiple endpoints
+* **Alert System** – Warnings for repeated failures
+* **History & Logging** – Check history and log files
+
+---
+
+## 🛠️ Technologies
+
 Python 3.8+, FastAPI, Uvicorn, Requests, Psutil, Jinja2, Python-dotenv
 
-## 📁 Struktur Project
+---
+
+## 📁 Project Structure
+
 ```
 monitoring-api/
 ├── requirements.txt
@@ -28,80 +42,118 @@ monitoring-api/
 └── data/monitoring.log
 ```
 
-## ⚙️ Prasyarat
-- Python 3.8+
-- Backend API berjalan di port 3000
+---
 
-## 🚀 Instalasi & Menjalankan
+## ⚙️ Prerequisites
 
-### 1. Setup Project
+* Python 3.8+
+* Backend API running on port 3000
+
+---
+
+# 🚀 Installation & Running
+
+## 1. Setup Project
+
 ```bash
 mkdir monitoring-api && cd monitoring-api
 ```
 
-### 2. Virtual Environment
-**Linux/Mac:**
+---
+
+## 2. Virtual Environment
+
+### Linux / Mac
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
-**Windows:**
+
+### Windows
+
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+---
+
+## 3. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Konfigurasi (.env)
+---
+
+## 4. Configuration (.env)
+
 ```env
-API_URL=http://localhost:3000 # Ganti URL API Backend anda
+API_URL=http://localhost:3000 # Replace with your backend API URL
 CHECK_INTERVAL=30
 LOG_FILE=./data/monitoring.log
 ALERT_THRESHOLD=3
 ```
 
-### 5. Jalankan
-**Via script:**
+---
+
+## 5. Run
+
+### Via Script
+
 ```bash
-# Linux/Mac
+# Linux / Mac
 chmod +x run.sh && ./run.sh
+
 # Windows
 run.bat
 ```
-**Manual:**
+
+### Manual
+
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 6. Akses Dashboard
+---
+
+## 6. Access Dashboard
+
 ```
 http://localhost:8000
 ```
 
-## 📊 Dashboard Components
-- **Header** - Status API, last check, refresh button
-- **Alert Box** - Notifikasi kegagalan
-- **Summary Cards** - API Health, System Metrics, Uptime
-- **Endpoints Status** - Status tiap endpoint
-- **History Table** - Riwayat 10 pengecekan terakhir
+---
 
-## 🔌 API Endpoints
-| Endpoint | Method | Fungsi |
-|----------|--------|--------|
-| `/` | GET | Dashboard |
-| `/api/status` | GET | Status terkini |
-| `/api/history?limit=10` | GET | History |
-| `/api/summary` | GET | Ringkasan |
-| `/api/check-now` | GET | Check manual |
-| `/api/logs` | GET | Lihat log |
-| `/health` | GET | Health check |
+# 📊 Dashboard Components
 
-## ⚙️ Konfigurasi Endpoint
+* **Header** – API status, last check, refresh button
+* **Alert Box** – Failure notification
+* **Summary Cards** – API Health, System Metrics, Uptime
+* **Endpoints Status** – Status of each endpoint
+* **History Table** – History of the last 10 checks
+
+---
+
+# 🔌 API Endpoints
+
+| Endpoint                | Method | Function       |
+| ----------------------- | ------ | -------------- |
+| `/`                     | GET    | Dashboard      |
+| `/api/status`           | GET    | Current status |
+| `/api/history?limit=10` | GET    | History        |
+| `/api/summary`          | GET    | Summary        |
+| `/api/check-now`        | GET    | Manual check   |
+| `/api/logs`             | GET    | View logs      |
+| `/health`               | GET    | Health check   |
+
+---
+
+# ⚙️ Endpoint Configuration
+
 Edit `app/config.py`:
+
 ```python
 ENDPOINTS = [
     {'name': 'Root', 'path': '/', 'method': 'GET'},
@@ -109,53 +161,76 @@ ENDPOINTS = [
 ]
 ```
 
-Emdpoint di sesuaikan sama route api anda !
+Endpoints must be adjusted to match your API routes.
 
-## 🐛 Troubleshooting Cepat
+---
 
-**API tidak terbaca:**
+# 🐛 Quick Troubleshooting
+
+## API Not Detected
+
 ```bash
-curl http://localhost:3000  # Ganti Url API Backend anda
-curl http://localhost:8000/api/logs  # Cek log
+curl http://localhost:3000  # Replace with your backend API URL
+curl http://localhost:8000/api/logs  # Check logs
 ```
 
-**Port 8000 used:**
+---
+
+## Port 8000 Used
+
 ```bash
-# Ganti port
+# Change port
 uvicorn app.main:app --port 8001
 ```
 
-**Module not found:**
+---
+
+## Module Not Found
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## 🔧 Kustomisasi
-- **Ubah interval**: Edit `CHECK_INTERVAL` di `.env`
-- **Ubah threshold**: Edit `ALERT_THRESHOLD` di `.env`
-- **Tambah endpoint**: Edit `ENDPOINTS` di `config.py`
+---
 
-## 🚀 Deployment Production
+# 🔧 Customization
 
-### PM2
+* **Change interval**: Edit `CHECK_INTERVAL` in `.env`
+* **Change threshold**: Edit `ALERT_THRESHOLD` in `.env`
+* **Add endpoint**: Edit `ENDPOINTS` in `config.py`
+
+---
+
+# 🚀 Production Deployment
+
+## PM2
+
 ```bash
 npm install -g pm2
 pm2 start "uvicorn app.main:app --host 0.0.0.0 --port 8000" --name monitoring-api
 ```
 
-### Systemd (Linux)
+---
+
+## Systemd (Linux)
+
 ```bash
-# Buat file service, enable, start
+# Create service file, enable, start
 sudo systemctl enable monitoring-api
 sudo systemctl start monitoring-api
 ```
 
-## 📝 Logging
-File log: `data/monitoring.log`
+---
+
+# 📝 Logging
+
+Log file: `data/monitoring.log`
+
 ```
 2024-01-15 10:30:01 - INFO - Health check: up - 45ms
 ```
 
 ---
 
-**Selamat mencoba!** 🎉 Tools monitoring sederhana untuk memantau API backend Anda.
+**Happy monitoring!** 🎉
+A simple monitoring tool to monitor your backend API.
